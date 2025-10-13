@@ -1,14 +1,9 @@
 const express = require("express");
 const app = express();
+const router = require("./Router/auth-router");
+app.use("/api/auth", router);
 
-
-app.get("/",(req,res)=> {
-    res.status(200).send("welcome to home page");
-})
-app.get("/register",(req,res)=> {
-    res.status(200).send("welcome to registration page");
-})
-const port = 5000;
-app.listen(port, ()=> {
+const port= 5000;
+app.listen(port,()=> {
     console.log(`listening on port : ${port}`);
 });
