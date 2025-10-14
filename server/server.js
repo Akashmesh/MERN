@@ -1,6 +1,11 @@
 const express = require("express");
 const app = express();
 const router = require("./Router/auth-router");
+
+//addding express middleware
+app.use(express.json());
+
+//mounting the router to use in express app
 app.use("/api/auth", router);
 
 const port= 5000;
