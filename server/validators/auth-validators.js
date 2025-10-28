@@ -7,7 +7,7 @@ const signupSchema = z.object({
     .max(255,{message : "name must not be more than 255 characters"}),
        email : z.
     string({required_error : "email is requried"}).trim()
-    .min(3,{message :"email must be atleast 3 characters long"})
+    .email({ message: "Invalid email format" })
     .max(255,{message : "email must not be more than 255 characters"}),   
     phone : z.
     string({required_error : "phone number is requried"}).trim()
@@ -22,7 +22,7 @@ const signupSchema = z.object({
 const loginSchema = z.object({
      email : z.
     string({required_error : "email is requried"}).trim()
-    .min(3,{message :"email must be atleast 3 characters long"})
+    .email({ message: "Invalid email format" })
     .max(255,{message : "email must not be more than 255 characters"}), 
      password : z.
     string({required_error : "password is requried"})
