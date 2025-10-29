@@ -1,4 +1,4 @@
-// import { Analytics } from "../components/Analytics";
+import { Analytics } from "../components/Analytics";
 
 export const Home = () => {
   return (
@@ -7,8 +7,8 @@ export const Home = () => {
         <section className="section-hero">
           <div className="container grid grid-two-cols">
             <div className="hero-content">
-              <p>We are the World Best IT Company</p>
-              <h1>Welcome to Thapa Technical</h1>
+              <p>We are here for you...</p>
+              <h1>Welcome to ..... Tech Solutions</h1>
               <p>
                 Are you ready to take your business to the next level with
                 cutting-edge IT solutions? Look no further! At Thapa Technical,
@@ -39,27 +39,7 @@ export const Home = () => {
       </main>
 
       {/* 2nd section  */}
-      {/* <Analytics /> */}
-      <section className="section-analytics">
-        <div className="container grid grid-four-cols">
-            <div className="div1">
-                <h2>50+</h2>
-                <p>registered companies</p>
-            </div>
-              <div className="div1">
-                <h2>100,00+</h2>
-                <p>Happy Clients</p>
-            </div>
-              <div className="div1">
-                <h2>500+</h2>
-                <p>Well Known Developers</p>
-            </div>
-              <div className="div1">
-                <h2>24/7</h2>
-                <p>Services</p>
-            </div>
-        </div>
-      </section>
+      <Analytics />
 
       {/* 3rd section  */}
       <section className="section-hero">
