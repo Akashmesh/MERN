@@ -1,15 +1,14 @@
 import { NavLink } from "react-router-dom";
-import "../components/Navbar.css";
 export const Navbar =() => {
     return(
         <>
         <header>
-            <div className="container">
-                <div className="logo-brand">
+            <div className="nav-container">
+                <div className="logo">
                     <NavLink to="/">Akash</NavLink>
                 </div>
-                <nav>
-                    <ul>
+                <nav className>
+                    <ul className="navlinks">
                         <li><NavLink to="/">Home</NavLink></li>
                         <li><NavLink to="/about">About</NavLink></li>
                         <li><NavLink to="/contact">Contact</NavLink></li>
