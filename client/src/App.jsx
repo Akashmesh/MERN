@@ -6,6 +6,7 @@ import { Service } from './pages/Service';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { Navbar } from './components/Navbar';
+import {Logout} from "./pages/Logout";
 function App() {
   return (
     <>
@@ -18,6 +19,7 @@ function App() {
       <Route path='/service' element={<Service/>} />      
       <Route path='/login' element={<Login/>} />
       <Route path='/register' element={<Register/>} />
+      <Route path='/logout' element={<Logout/>} />
 
 
     </Routes>
