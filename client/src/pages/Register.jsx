@@ -30,16 +30,17 @@ const navigate = useNavigate();
                 },
                 body :JSON.stringify(user),
             });
-            console.log("response data :" ,response );
+                 const res_data = await response.json();
+                console.log("response from server :" ,res_data.extraDetails );
+
             if(response.ok) {
-                const res_data = await response.json();
                 storeTokenInLS(res_data.token);
                 navigate("/");
                 alert("registration successful");
                 // setUser({username :"", email: "", phone :"" ,password : ""});
                 console.log(responseData);
             }else {
-                alert("invalid entry");
+                alert(res_data.extraDetails ? res_data.extraDetails : res_data.message);
                 console.log("Error inside response", error);
             }
         } catch (error) {

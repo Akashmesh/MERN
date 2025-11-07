@@ -1,24 +1,5 @@
 const {z} = require("zod");
 
-const signupSchema = z.object({
-    username : z.
-    string({required_error : "name is requried"}).trim()
-    .min(3,{message :"name must be atleast 3 characters long"})
-    .max(255,{message : "name must not be more than 255 characters"}),
-       email : z.
-    string({required_error : "email is requried"}).trim()
-    .email({ message: "Invalid email format" })
-    .max(255,{message : "email must not be more than 255 characters"}),   
-    phone : z.
-    string({required_error : "phone number is requried"}).trim()
-    .min(3,{message :"phone number must be atleast 3  long"})
-    .max(255,{message : "phone number must not be more than 255 characters"}),   
-    password : z.
-    string({required_error : "password is requried"})
-    .min(6,{message :"password must be atleast 6 characters long"})
-    .max(1024,{message : "password must not be more than 1024 characters"}),
-});
-
 const loginSchema = z.object({
      email : z.
     string({required_error : "email is requried"}).trim()
@@ -29,5 +10,17 @@ const loginSchema = z.object({
     .min(6,{message :"password must be atleast 6 characters long"})
     .max(1024,{message : "password must not be more than 1024 characters"}),
 })
+
+const signupSchema = loginSchema.extend({
+    username : z.
+    string({required_error : "name is requried"}).trim()
+    .min(3,{message :"name must be atleast 3 characters long"})
+    .max(255,{message : "name must not be more than 255 characters"}), 
+    phone : z.
+    string({required_error : "phone number is requried"}).trim()
+    .min(10,{message :"phone number must be atleast 10 characters long"})
+    .max(255,{message : "phone number must not be more than 255 characters"}),   
+});
+
 
 module.exports= { signupSchema, loginSchema };
