@@ -6,6 +6,7 @@ const [user,setUser] = useState("");
 const[services, setServices] = useState([]);
 
         const storeTokenInLS = (serverToken) => {
+            setToken(serverToken);
             return localStorage.setItem("token", serverToken);  
         };
         let isLoggedIn = !!token;
