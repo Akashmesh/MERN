@@ -7,6 +7,7 @@ const contactRoute = require("./Router/contact-router");
 const serviceRoute = require("./Router/service-router");
 const connectDb = require("./utils/db");
 const errorMiddleware = require("./middlewares/error-middleware");
+const adminRoute = require("./Router/admin-router");
 
 const corsOptions = {
     origin : "http://localhost:5173",
@@ -21,6 +22,9 @@ app.use(express.json());
 app.use("/api/auth", authRoute);
 app.use("/api/form", contactRoute);
 app.use("/api/data", serviceRoute);
+
+//admin route
+app.use("/api/admin" , adminRoute);
 
 
 
