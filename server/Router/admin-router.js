@@ -5,6 +5,7 @@ const adminMiddleware = require("../middlewares/admin-middleware");
 const router = express.Router();
 
 router.route("/users").get(authMiddleware, adminMiddleware, adminController.getAllUsers);
+router.route("/users/delete/:id").delete(authMiddleware, adminController.deleteUserById);
 router.route("/contacts").get(authMiddleware, adminMiddleware, adminController.getAllContacts);
 
 module.exports = router;
