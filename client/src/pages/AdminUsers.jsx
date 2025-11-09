@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../store/Auth";
+import { toast } from 'react-toastify';
+
 export const AdminUsers =() => {
     const [users, setUsers] = useState([]);
     const {authorizationToken} =useAuth();
@@ -21,6 +23,7 @@ export const AdminUsers =() => {
 
     //delete user on btn click
     const deleteUser = async(id) => {
+        try {
         const response = await fetch(`http://localhost:5000/api/admin/users/delete/${id}`, {
             method : "DELETE",
             headers : {
@@ -29,6 +32,13 @@ export const AdminUsers =() => {
         });
         const data = await response.json();
         console.log(`users after delete : ${data}`);
+        if(response.ok) {
+            getAllUsersData();
+            toast.success("User Deleted Successfully");
+        }
+    }catch(error) {
+    console.log(error);
+    }
     };
     useEffect (()=> {
         getAllUsersData();
