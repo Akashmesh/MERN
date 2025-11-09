@@ -6,7 +6,7 @@ export const Service = () => {
             <div className="container">
                 <div className="container grid grid-three-cols">
                     {
-                        services.map((curElem , index)=> {
+                        services.map((curElem , index) => {
                             const {price , description , provider , service} = curElem;
                             return (
                                 <div className="card" key={index}>

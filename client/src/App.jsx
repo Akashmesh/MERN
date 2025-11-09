@@ -7,6 +7,10 @@ import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { Navbar } from './components/Navbar';
 import {Logout} from "./pages/Logout";
+import {Error} from "./pages/Error";
+import {AdminLayout} from "./layouts/AdminLayout";
+import { AdminContacts } from "./pages/AdminContacts";
+import { AdminUsers } from "./pages/AdminUsers";
 function App() {
   return (
     <>
@@ -20,8 +24,11 @@ function App() {
       <Route path='/login' element={<Login/>} />
       <Route path='/register' element={<Register/>} />
       <Route path='/logout' element={<Logout/>} />
-
-
+      <Route path="*" element={<Error/>} />
+      <Route path="/admin" element={<AdminLayout/>} >
+      <Route path="users" element={<AdminUsers/>} />
+      <Route path="contacts" element={<AdminContacts/>} />
+      </Route>
     </Routes>
     </BrowserRouter>
     </>
