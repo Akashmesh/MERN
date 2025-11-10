@@ -36,6 +36,21 @@ const deleteUserById = async (req ,res) => {
         next(error);
     }
 }
+//update user logic
+const updateUserById = async(req, res) => {
+    try {
+        const id = req.params.id;
+        const updatedData = req.body;
+        const updatedUserData = await User.updateOne(
+            {_id : id }, {$set : updatedUserData,
+
+            }
+        );
+        return res.status(200).json(updatedData);
+    } catch (error) {
+        next(error);
+    }
+}
 
 //get all contacts
 const getAllContacts = async (req, res) => {
