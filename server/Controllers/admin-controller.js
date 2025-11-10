@@ -40,8 +40,8 @@ const deleteUserById = async (req ,res) => {
 const updateUserById = async(req, res) => {
     try {
         const id = req.params.id;
-        const updatedData = req.body;
-        const updatedUserData = await User.updateOne(
+        const updatedUserData = req.body;
+        const updatedData = await User.updateOne(
             {_id : id }, {$set : updatedUserData,
 
             }
@@ -65,4 +65,4 @@ const getAllContacts = async (req, res) => {
     }
 };
 
-module.exports = {getAllContacts, getAllUsers, deleteUserById, getUserById};
+module.exports = {getAllContacts, getAllUsers, deleteUserById, getUserById, updateUserById};
