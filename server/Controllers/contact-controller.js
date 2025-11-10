@@ -26,5 +26,3 @@ const contactForm = async (req, res) => {
 
 module.exports = contactForm;
 
-
-//modified from gpt
