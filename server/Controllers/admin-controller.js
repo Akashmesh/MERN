@@ -65,4 +65,15 @@ const getAllContacts = async (req, res) => {
     }
 };
 
-module.exports = {getAllContacts, getAllUsers, deleteUserById, getUserById, updateUserById};
+//delete contact
+const deleteContactById = async (req, res) => {
+    try {
+        const id =req.params.id;
+        await Contact.deleteOne({_id :id});
+        return res.status(200).json({message : "Contact Deleted Successfully"});
+    } catch (error) {
+        next(error);
+    }
+}
+
+module.exports = {getAllContacts, getAllUsers, deleteUserById, getUserById, updateUserById, deleteContactById};
