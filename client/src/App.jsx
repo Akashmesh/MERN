@@ -12,6 +12,8 @@ import {AdminLayout} from "./layouts/AdminLayout";
 import { AdminContacts } from "./pages/AdminContacts";
 import { AdminUsers } from "./pages/AdminUsers";
 import { AdminUpdate } from "./pages/AdminUpdate";
+import {Footer} from "./components/Footer";
+import { AdminHome } from "./pages/AdminHome";
 function App() {
   return (
     <>
@@ -27,11 +29,13 @@ function App() {
       <Route path='/logout' element={<Logout/>} />
       <Route path="*" element={<Error/>} />
       <Route path="/admin" element={<AdminLayout/>} >
+        <Route index element={<AdminHome />} />   {/* New Default Dashboard */}
       <Route path="users" element={<AdminUsers/>} />
       <Route path="users/:id/edit" element={<AdminUpdate/>} /> 
       <Route path="contacts" element={<AdminContacts/>} />
       </Route>
     </Routes>
+    <Footer />
     </BrowserRouter>
     </>
   )

@@ -3,6 +3,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({children}) => {
 const [token, setToken] = useState(localStorage.getItem("token"));
 const [user,setUser] = useState("");
+const [isLoading, setIsLoading] = useState(true);
 const[services, setServices] = useState([]);
 const authorizationToken = `Bearer ${token}`;
 
@@ -20,6 +21,7 @@ const authorizationToken = `Bearer ${token}`;
         //function to check user authorized or not
 const userAuthentication =async () => {
     try {
+        setIsLoading(true);
         const response = await fetch("http://localhost:5000/api/auth/user",
         {
             method : "GET",
@@ -30,8 +32,10 @@ const userAuthentication =async () => {
         if(response.ok) {
             const data = await response.json();
             setUser(data.userData);
+            setIsLoading(false);
         }else {
             console.error(`Error fetchin user data`);
+            setIsLoading(false);
         }
     } catch (error) {
         console.log(error);
@@ -58,7 +62,7 @@ useEffect (() => {
     userAuthentication();
 }, []);
         return (
-            <AuthContext.Provider value={{isLoggedIn, storeTokenInLS, LogoutUser, user, services, authorizationToken}}>{children}</AuthContext.Provider>
+            <AuthContext.Provider value={{isLoggedIn, storeTokenInLS, LogoutUser, user, services, authorizationToken,isLoading}}>{children}</AuthContext.Provider>
         );
 };
 export const useAuth = () => {

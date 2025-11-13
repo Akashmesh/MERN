@@ -9,7 +9,7 @@ export const Navbar =() => {
                 <div className="logo">
                     <NavLink to="/">Akash</NavLink>
                 </div>
-                <nav className>
+                <nav>
                     <ul className="navlinks">
                         <li><NavLink to="/">Home</NavLink></li>
                         <li><NavLink to="/about">About</NavLink></li>

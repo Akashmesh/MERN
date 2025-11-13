@@ -1,0 +1,2027 @@
+client-src-components-Analytics.jsx
+export const Analytics = () => {
+    return <>
+    <section className="section-analytics">
+        <div className="container grid grid-four-cols">
+            <div className="div1">
+                <h2>50+</h2>
+                <p>registered companies</p>
+            </div>
+              <div className="div1">
+                <h2>100,00+</h2>
+                <p>Happy Clients</p>
+            </div>
+              <div className="div1">
+                <h2>500+</h2>
+                <p>Well Known Developers</p>
+            </div>
+              <div className="div1">
+                <h2>24/7</h2>
+                <p>Services</p>
+            </div>
+        </div>
+      </section>
+    </>
+} 
+client-src-components-Navbar.jsx
+import { NavLink } from "react-router-dom";
+import { useAuth } from "../store/Auth";
+export const Navbar =() => {
+    const {isLoggedIn} = useAuth();
+    return(
+        <>
+        <header>
+            <div className="nav-container">
+                <div className="logo">
+                    <NavLink to="/">Akash</NavLink>
+                </div>
+                <nav className>
+                    <ul className="navlinks">
+                        <li><NavLink to="/">Home</NavLink></li>
+                        <li><NavLink to="/about">About</NavLink></li>
+                        <li><NavLink to="/contact">Contact</NavLink></li>
+                        <li><NavLink to="/service">Service</NavLink></li>
+                        {isLoggedIn ? (
+                        <li>
+                            <NavLink to="/logout">Logout</NavLink>
+                        </li>): (
+                            <>
+                        <li><NavLink to="/register">Register</NavLink></li>
+                        <li><NavLink to="/login">Login</NavLink></li>
+                        </>
+                        )}
+
+                    </ul>
+                </nav>
+            </div>
+        </header>
+        </>
+    )
+}
+src-layouts-AdminLayout.jsx
+import { NavLink, Outlet, Navigate } from "react-router-dom";
+import { FaUser, FaHome ,FaRegListAlt , } from "react-icons/fa";
+import { FaMessage} from "react-icons/fa6";
+import { useAuth } from "../store/Auth";
+
+export const AdminLayout = () => {
+    const {user, isLoading} = useAuth();
+    console.log("admin layout", user);
+    if(isLoading) {
+        return <h1>Loading...</h1>
+    }
+    if(!user.isAdmin) {
+        return <Navigate to="/" />
+    }
+    return <>
+    <header>
+        <div className="container">
+            <nav>
+                <ul>
+                    <li><NavLink to="/admin/users"><FaUser/> Users</NavLink></li>
+                    <li><NavLink to="/admin/contacts"><FaMessage/> Contacts</NavLink></li>
+                    <li><NavLink to="/serice"><FaRegListAlt/> Service</NavLink></li>
+                    <li><NavLink to="/"><FaHome/> Home</NavLink></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <Outlet/>
+    </>
+};src-pages-About.jsx 
+import { NavLink } from "react-router-dom";
+import { Analytics } from "../components/Analytics";
+import { useAuth } from "../store/Auth";
+
+export const About = () => {
+  const {user} = useAuth();
+  return (
+    <>
+      <main>
+        <section className="section-hero">
+          <div className="container grid grid-two-cols">
+            <div className="hero-content">
+              {/* <p>We care to cure your Health</p> */}
+              <p>Welcome, {user ? `${user.username} to our website` : `to our websiste`}</p>
+
+              <h1>Why Choose Us? </h1>
+              <p>
+                Expertise: Our team consists of experienced IT professionals who
+                are passionate about staying up-to-date with the latest industry
+                trends.
+              </p>
+              <p>
+                Customization: We understand that every business is unique.
+                Thats why we create solutions that are tailored to your specific
+                needs and goals.
+              </p>
+              <p>
+                Customer-Centric Approach: We prioritize your satisfaction and
+                provide top-notch support to address your IT concerns.
+              </p>
+              <p>
+                Affordability: We offer competitive pricing without compromising
+                on the quality of our services.
+              </p>
+              <p>
+                Reliability: Count on us to be there when you need us. We're
+                committed to ensuring your IT environment is reliable and
+                available 24/7.
+              </p>
+              <div className="btn btn-group">
+                <NavLink to="/contact">
+                  <button className="btn"> Connect Now</button>
+                </NavLink>
+                <button className="btn secondary-btn">learn more</button>
+              </div>
+            </div>
+            <div className="hero-image">
+              <img
+                src="/images/about.png"
+                alt="coding buddies "
+                width="400"
+                height="500"
+              />
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <Analytics />
+    </>
+  );
+};
+src-pages-AdminUsers.jsx
+import { useEffect, useState } from "react";
+import { useAuth } from "../store/Auth";
+import { toast } from 'react-toastify';
+
+export const AdminUsers =() => {
+    const [users, setUsers] = useState([]);
+    const {authorizationToken} =useAuth();
+    const getAllUsersData = async () => {
+        try {
+            const response = await fetch("http://localhost:5000/api/admin/users", {
+                method : "GET",
+                headers : {
+                    Authorization : authorizationToken,
+                }
+            });
+            const data = await response.json();
+            console.log(`users ${data}`);
+            setUsers(data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    //delete user on btn click
+    const deleteUser = async(id) => {
+        try {
+        const response = await fetch(`http://localhost:5000/api/admin/users/delete/${id}`, {
+            method : "DELETE",
+            headers : {
+                Authorization : authorizationToken ,
+            },
+        });
+        const data = await response.json();
+        console.log(`users after delete : ${data}`);
+        if(response.ok) {
+            getAllUsersData();
+            toast.success("User Deleted Successfully");
+        }
+    }catch(error) {
+    console.log(error);
+    }
+    };
+    useEffect (()=> {
+        getAllUsersData();
+    },[]);
+    return <>
+    <section className="admin-users-section">
+        <div className="container">
+            <h1>Admin Users Data</h1>
+        </div>
+        <div className="container admin-users">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Update</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {users.map ((curUser , index)=> {
+                        return (
+                            <tr key={index}>
+                                <td>{curUser.username}</td>
+                                <td>{curUser.email}</td>
+                                <td>{curUser.phone}</td>
+                                <td>update</td>
+                                <td><button onClick={() => deleteUser(curUser._id)}>Delete</button></td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
+        </div>
+    </section>
+        </>
+}
+src-pages-contact.jsx
+import { useState } from "react";
+import { useAuth } from "../store/Auth";
+export const Contact = () => {
+  const [contact, setContact] = useState({
+    username: "",
+    email: "",
+    message: "",
+  });
+  const [userData, setUserData] = useState(true);
+  const {user} = useAuth();
+  if(userData && user) {
+    setContact({
+      username : user.username, 
+      email : user.email,
+      message : "",
+    });
+    setUserData(false);
+  }
+
+  const handleInput = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    setContact({
+      ...contact,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit =async (e) => {
+    e.preventDefault();
+
+    console.log(contact);
+    try {
+      const response  = await fetch("http://localhost:5000/api/form/contact", {
+        method : "POST",
+        headers : {
+          "Content-Type" : "application/json",
+        },
+        body : JSON.stringify(contact),
+      });
+      if(response.ok) {
+        setContact({
+          username : "",
+          email : "",
+          message : "",
+        });
+        const data = await response.json();
+        console.log(data);
+        alert("message sent successfully");
+      }
+    } catch (error) {
+      alert("message not sent");
+      console.log(error);
+    }
+  };
+
+
+  return (
+    <>
+      <section className="section-contact">
+        <div className="contact-content container">
+          <h1 className="main-heading">contact us</h1>
+        </div>
+        {/* contact page main  */}
+        <div className="container grid grid-two-cols">
+          <div className="contact-img">
+            <img src="/images/support.png" alt="we are always ready to help" />
+          </div>
+
+          {/* contact form content actual  */}
+          <section className="section-form">
+            <form onSubmit={handleSubmit}>
+              <div>
+                <label htmlFor="username">username</label>
+                <input
+                  type="text"
+                  name="username"
+                  id="username"
+                  autoComplete="off"
+                  value={contact.username}
+                  onChange={handleInput}
+                  required
+                />
+              </div>
+
+              <div>
+                <label htmlFor="email">email</label>
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  autoComplete="off"
+                  value={contact.email}
+                  onChange={handleInput}
+                  required
+                />
+              </div>
+
+              <div>
+                <label htmlFor="message">message</label>
+                <textarea
+                  name="message"
+                  id="message"
+                  autoComplete="off"
+                  value={contact.message}
+                  onChange={handleInput}
+                  required
+                  cols="30"
+                  rows="6"
+                ></textarea>
+              </div>
+
+              <div>
+                <button type="submit">submit</button>
+              </div>
+            </form>
+          </section>
+        </div>
+
+        <section className="mb-3">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3782.2613173278896!2d73.91411937501422!3d18.562253982539413!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2c147b8b3a3bf%3A0x6f7fdcc8e4d6c77e!2sPhoenix%20Marketcity%20Pune!5e0!3m2!1sen!2sin!4v1697604225432!5m2!1sen!2sin"
+            width="100%"
+            height="450"
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </section>
+      </section>
+    </>
+  );
+};
+src-pages-Error.jsx
+import { NavLink } from "react-router-dom";
+
+export const Error = () => {
+  return (
+    <>
+      <section id="error-page">
+        <div className=" content">
+          <h2 className="header">404</h2>
+          <h4>Sorry! Page not found</h4>
+          <p>
+            Oops! It seems like the page you're trying to access doesn't exist.
+            If you believe there's an issue, feel free to report it, and we'll
+            look into it.
+          </p>
+          <div className="btns">
+            <NavLink to="/">return home</NavLink>
+            <NavLink to="/contact">report problem</NavLink>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+};
+src-pages-Home.jsx
+import { Analytics } from "../components/Analytics";
+
+export const Home = () => {
+  return (
+    <>
+      <main>
+        <section className="section-hero">
+          <div className="container grid grid-two-cols">
+            <div className="hero-content">
+              <p>We are here for you...</p>
+              <h1>Welcome to ..... Tech Solutions</h1>
+              <p>
+                Are you ready to take your business to the next level with
+                cutting-edge IT solutions? Look no further! At Thapa Technical,
+                we specialize in providing innovative IT services and solutions
+                tailored to meet your unique needs.
+              </p>
+              <div className="btn btn-group">
+                <a href="/contact">
+                  <button className="btn">connect now</button>
+                </a>
+                <a href="/services">
+                  <button className="btn secondary-btn">learn more</button>
+                </a>
+              </div>
+            </div>
+
+            {/* hero images  */}
+            <div className="hero-image">
+              <img
+                src="/images/home.png"
+                alt="coding together"
+                width="400"
+                height="500"
+              />
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* 2nd section  */}
+      <Analytics />
+
+      {/* 3rd section  */}
+      <section className="section-hero">
+        <div className="container grid grid-two-cols">
+          {/* hero images  */}
+          <div className="hero-image">
+            <img
+              src="/images/design.png"
+              alt="coding together"
+              width="400"
+              height="500"
+            />
+          </div>
+
+          <div className="hero-content">
+            <p>We are here to help you</p>
+            <h1>Get Started Today</h1>
+            <p>
+              Ready to take the first step towards a more efficient and secure
+              IT infrastructure? Contact us today for a free consultation and
+              let's discuss how Thapa Technical can help your business thrive in
+              the digital age.
+            </p>
+            <div className="btn btn-group">
+              <a href="/contact">
+                <button className="btn">connect now</button>
+              </a>
+              <a href="/services">
+                <button className="btn secondary-btn">learn more</button>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+};
+src-pages-Login.jsx
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../store/Auth";
+import { toast } from 'react-toastify';
+
+export const Login = () => {
+    const[user,setUser] = useState({
+        email :"",
+        password :"",
+    });
+    const navigate = useNavigate();
+        const {storeTokenInLS} = useAuth();
+
+    const handleInput = (e) => {
+        console.log(e);
+        const name = e.target.name;
+        const value = e.target.value;
+        setUser ({
+            ...user,
+            [name] :value,
+
+        })
+
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        console.log(user);
+        try {
+            const response = await fetch("http://localhost:5000/api/auth/login",{
+                method :"POST",
+                headers : {
+                    "Content-Type" : "application/json",
+                },
+                body :JSON.stringify(user),
+            });
+            if(response.ok) {
+                const res_data = await response.json();
+                console.log("After Login", res_data);
+                storeTokenInLS (res_data.token);
+                navigate("/");
+                toast.success("registration successful")
+            }else {
+                toast.error("invalid credentials");
+            }
+        } catch (error) {
+            console.log(error);
+            
+        }
+
+    };
+
+    return <>
+    <section>
+        <main>
+            <div className="section-registration">
+                <div className="container grid grid-two-cols">
+                    <div className="registration-image reg-img">
+                        <img src="/images/login.png" alt="registration image" width="500" height="500" />
+                    </div>
+                    <div className="registration-form">
+                        <h1 className="main-heading mb-3">Login Form</h1><br />
+                        <form onSubmit={handleSubmit}>
+                            <div>
+                                <label htmlFor="email">email</label>
+                                <input type="email" name="email" value={user.email} onChange={handleInput} placeholder="enter email" />
+                            </div>
+  
+                            <div>
+                                <label htmlFor="password">password</label>
+                                <input type="password" name="password" value={user.password} onChange={handleInput} placeholder="password" />
+                            </div>
+                            <br />
+                            <button type="submit" className="btn btn-submit">Login</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </section>
+    </>
+}
+src-pages-Logout.jsx
+import { useEffect } from "react";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../store/Auth";
+export const Logout =() => {
+    const {LogoutUser} = useAuth();
+    useEffect (()=> {
+        LogoutUser();
+
+    },[LogoutUser]);
+    return <Navigate to="/login" />
+
+}
+src-pages-Register.jsx
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../store/Auth";
+import { toast } from 'react-toastify';
+
+export const Register = () => {
+    const [user, setUser] =useState({
+        username :"",
+        email : "",
+        phone : "",
+        password : "",
+    });
+    const {storeTokenInLS} = useAuth();
+const navigate = useNavigate();
+    const handleInput = (e) => {
+        console.log(e);
+        let name = e.target.name;
+        let value = e.target.value;
+        setUser({...user, 
+            [name] : value,
+        });
+    };
+
+    const handleSubmit =async (e) => {
+        e.preventDefault();
+        console.log(user);
+        try {
+            const response = await fetch("http://localhost:5000/api/auth/register", {
+                method :"POST",
+                headers : {
+                    "Content-Type" : "application/json",
+                },
+                body :JSON.stringify(user),
+            });
+                 const res_data = await response.json();
+                console.log("response from server :" ,res_data.extraDetails );
+
+            if(response.ok) {
+                storeTokenInLS(res_data.token);
+                navigate("/");
+                toast.success("registration successful");
+                // setUser({username :"", email: "", phone :"" ,password : ""});
+                console.log(responseData);
+            }else {
+                toast.error(res_data.extraDetails ? res_data.extraDetails : res_data.message);
+                console.log("Error inside response", error);
+            }
+        } catch (error) {
+            console.error("Error" , error);
+            
+        }
+    };
+
+    return <>
+    <section>
+        <main>
+            <div className="section-registration">
+                <div className="container grid grid-two-cols">
+                    <div className="registration-image reg-img">
+                        <img src="/images/register.png" alt="registration image" width="500" height="500" />
+                    </div>
+                    <div className="registration-form">
+                        <h1 className="main-heading mb-3">Registration Form</h1><br />
+                        <form onSubmit={handleSubmit}>
+                            <div>
+                                <label htmlFor="username">username</label>
+                                <input type="text" name="username" value={user.username} onChange={handleInput} placeholder="username" />
+                            </div>
+                            <div>
+                                <label htmlFor="email">email</label>
+                                <input type="email" name="email" value={user.email} onChange={handleInput} placeholder="enter email" />
+                            </div>
+                            <div>
+                                <label htmlFor="phone">phone</label>
+                                <input type="number" name="phone" value={user.phone} onChange={handleInput} placeholder="phone" />
+                            </div>
+                            <div>
+                                <label htmlFor="password">password</label>
+                                <input type="password" name="password" value={user.password} onChange={handleInput} placeholder="password" />
+                            </div>
+                            <br />
+                            <button type="submit" className="btn btn-submit">Register Now</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </section>
+    </>
+}
+src-pages-Service.jsx
+import { useAuth } from "../store/Auth"
+export const Service = () => {
+    const {services} = useAuth();
+    return (
+        <section className="section-services">
+            <div className="container">
+                <div className="container grid grid-three-cols">
+                    {
+                        services.map((curElem , index) => {
+                            const {price , description , provider , service} = curElem;
+                            return (
+                                <div className="card" key={index}>
+                                    <div className="card-img">
+                                        <img src="/images/design.png" alt="services images" width="200"/>
+                                    </div>
+                                    <div className="card-details">
+                                        <div className="grid grid-two-cols">
+                                            <p>{provider}</p>
+                                            <p>{price}</p>
+                                        </div>
+                                        <h2>{service}</h2>
+                                        <p>{description}</p>
+                                    </div>
+
+                                </div>
+                            )
+                        })
+                    }
+                </div>
+            </div>
+        </section>
+    )
+
+} 
+src-pages-AdminUpdate.jsx
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useAuth } from "../store/Auth";
+import { toast } from "react-toastify";
+export const AdminUpdate = () => {
+    const [data , setData] = useState({
+        username : "",
+        email : "",
+        phone : "",
+    });
+    const params = useParams();
+    console.log("params single user", params);
+    const {authorizationToken} = useAuth();
+
+    //get single user data
+    const getSingleUserData = async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/admin/users/${params.id}`,
+                {
+                    method : "GET",
+                    headers: {
+                        Authorization : authorizationToken,
+                    },
+                }
+            );
+            const data = await response.json();
+            console.log(`users single data ${data}`)
+            setData(data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    useEffect(()=> {
+        getSingleUserData();
+    },[]);
+    const handleInput = (e) => {
+        let name = e.target.name;
+        let value = e.target.value;
+        setData ({
+            ...data, [name] : value,
+        });
+    };
+
+    //to update data dynamically
+    const handleSubmit = async(e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch(`http://localhost:5000/api/admin/users/update/${params.id}`,
+                {
+                    method : "PATCH",
+                    headers : {
+                        "Content-Type" : "application/json",
+                        Authorization : authorizationToken,
+                    },
+                    body : JSON.stringify(data),
+                }
+            );
+            if(response.ok) {
+                toast.success("updated successfully");
+            }else {
+                toast.error("Not Updated");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    return (
+        <>
+        <section className="section-container">
+            <div className="contact-content container">
+                <h1 className="main-heading">
+                    Updated User Data
+                </h1>
+            </div>
+            <div className="container grid grid-two-cols">
+                <section className="section-form">
+                    <form onSubmit={handleSubmit}>
+                        <div>
+                            <label htmlFor="username">Username</label>
+                            <input type="text" name="username" id="username" autoComplete="off" value={data.username} onChange={handleInput} required/>
+                        </div>
+                        <div>
+                            <label htmlFor="email">email</label>
+                            <input type="email" name="email" id="email" autoComplete="off" value={data.email} onChange={handleInput} required/>
+                        </div>
+                        <div>
+                            <label htmlFor="phone">Mobile</label>
+                            <input type="phone" name="phone" id="phone" autoComplete="off" value={data.phone} onChange={handleInput} required/>
+                        </div>
+                        <div><button type="submit">Update</button></div>
+                    </form>
+                </section>
+            </div>
+        </section>
+        </>
+    )
+}
+src-pages-AdminContacts.jsx
+import { useEffect, useState } from "react";
+import {useAuth} from "../store/Auth";
+import {toast} from "react-toastify";
+export const AdminContacts = () => {
+    const [contactData, setContactData] = useState([]);
+    const {authorizationToken} = useAuth();
+    const getContactsData = async () => {
+        try {
+            const response = await fetch("http://localhost:5000/api/admin/contacts", {
+                method : "GET",
+                headers : {
+                    Authorization : authorizationToken,
+                },
+            });
+            const data = await response.json();
+            console.log("Contact Data", data);
+            if(response.ok) {
+                setContactData(data);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    //delete contact functionality 
+    const deleteContactById = async (id) => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/admin/contact/delete/${id}`, {
+                method : "DELETE",
+                headers : {
+                    Authorization : authorizationToken,
+                }
+            });
+            if(response.ok) {
+                getContactsData();
+                toast.success("deleted successfully");
+            }else {
+                toast.error("not deleted");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    useEffect(()=> {
+        getContactsData();
+    },[])
+   return (
+    <>
+    <section className="admin-contacts-section">
+        <h1>Admin Contact Data</h1>
+        <div className="container admin-users">
+            {contactData.map((curContactData , index) => {
+                const {username, email, message, _id} = curContactData;
+                return (
+                    <div key={index}>
+                        <p>{username}</p>
+                        <p>{email}</p>
+                        <p>{message}</p>
+                        <button className="btn" onClick={() => deleteContactById(_id)}>Delete</button>
+                    </div>
+                );
+            })}
+        </div>
+    </section>
+    </>
+   )
+}
+src-store-Auth.jsx 
+import { createContext, useContext, useEffect, useState } from "react";
+export const AuthContext = createContext();
+export const AuthProvider = ({children}) => {
+const [token, setToken] = useState(localStorage.getItem("token"));
+const [user,setUser] = useState("");
+const [isLoading, setIsLoading] = useState(true);
+const[services, setServices] = useState([]);
+const authorizationToken = `Bearer ${token}`;
+
+        const storeTokenInLS = (serverToken) => {
+            setToken(serverToken);
+            return localStorage.setItem("token", serverToken);  
+        };
+        let isLoggedIn = !!token;
+        console.log("isLoggedIn", isLoggedIn);
+        //logout functionality
+        const LogoutUser = () => { 
+            setToken ("");
+            return localStorage.removeItem("token");
+        }
+        //function to check user authorized or not
+const userAuthentication =async () => {
+    try {
+        setIsLoading(true);
+        const response = await fetch("http://localhost:5000/api/auth/user",
+        {
+            method : "GET",
+            headers : {
+                Authorization : authorizationToken,
+            },
+        });
+        if(response.ok) {
+            const data = await response.json();
+            setUser(data.userData);
+            setIsLoading(false);
+        }else {
+            console.error(`Error fetchin user data`);
+            setIsLoading(false);
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};
+//to fetch service data from db 
+const getServices = async () => {
+    try {
+        const response = await fetch("http://localhost:5000/api/data/service",
+            {
+                method : "GET",
+            });
+        if (response.ok) {
+            const data = await response.json();
+            console.log(data.data);
+            setServices(data.data);
+        }
+    } catch (error) {
+        console.log(`Servies frontend error ${error}`);
+    }
+}
+useEffect (() => {
+    getServices();
+    userAuthentication();
+}, []);
+        return (
+            <AuthContext.Provider value={{isLoggedIn, storeTokenInLS, LogoutUser, user, services, authorizationToken,isLoading}}>{children}</AuthContext.Provider>
+        );
+};
+export const useAuth = () => {
+    const authContextValue = useContext(AuthContext);
+    if(!authContextValue) {
+        throw new Error("useAuth used outsided of provider");
+        
+    } 
+    return authContextValue;
+};
+src-App.jsx
+import {BrowserRouter , Routes, Route} from "react-router-dom";
+import { Home } from './pages/Home';
+import { About } from './pages/About';
+import { Contact } from './pages/Contact';
+import { Service } from './pages/Service';
+import { Login } from './pages/Login';
+import { Register } from './pages/Register';
+import { Navbar } from './components/Navbar';
+import {Logout} from "./pages/Logout";
+import {Error} from "./pages/Error";
+import {AdminLayout} from "./layouts/AdminLayout";
+import { AdminContacts } from "./pages/AdminContacts";
+import { AdminUsers } from "./pages/AdminUsers";
+function App() {
+  return (
+    <>
+    <BrowserRouter>
+    <Navbar/>
+    <Routes>
+      <Route path='/' element={<Home/>} />
+      <Route path='/about' element={<About/>} />
+      <Route path='/contact' element={<Contact/>} />
+      <Route path='/service' element={<Service/>} />      
+      <Route path='/login' element={<Login/>} />
+      <Route path='/register' element={<Register/>} />
+      <Route path='/logout' element={<Logout/>} />
+      <Route path="*" element={<Error/>} />
+      <Route path="/admin" element={<AdminLayout/>} >
+      <Route path="users" element={<AdminUsers/>} />
+      <Route path="contacts" element={<AdminContacts/>} />
+      </Route>
+    </Routes>
+    </BrowserRouter>
+    </>
+  )
+}
+
+export default App
+
+index.css
+
+/* navbar */
+.nav-container {
+  max-width: 140rem;
+  padding: 4.2rem 2.4rem;
+  display: flex;
+justify-content: space-between;
+}
+
+.navlinks {
+  display: flex;
+  gap: 3.2rem;
+}
+.navlinks li {
+  list-style-type: none;
+}
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Urbanist, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  color-scheme: light dark;
+}
+
+:root {
+  --bg-color: #f4f3ff;
+  --btn-color: #646cff;
+  --dark-color: #242424;
+  --helper-color: #99b9ff;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+/*? base style */
+
+body {
+  margin: 0;
+  /* display: flex;
+  place-items: center; */
+  /* min-width: 32rem; */
+  min-height: 100vh;
+}
+
+ /*?  Help me reach 1 Million subs 👉 https://youtube.com/thapatechnical */
+
+h1 {
+  font-size: 5.4rem;
+  line-height: 1.1;
+  font-weight: bold;
+}
+
+p,
+li,
+label,
+input,
+textarea {
+  font-size: 1.8rem;
+  line-height: 1.56;
+  letter-spacing: 0.1rem;
+  word-spacing: 0.06rem;
+}
+
+a {
+  font-weight: 500;
+  font-size: 1.8rem;
+  letter-spacing: 0.1rem;
+  color: var(--btn-color);
+  text-decoration: inherit;
+}
+
+li {
+  list-style: none;
+}
+
+/*? layout Rule  */
+
+.container {
+  max-width: 140rem;
+  padding: 4rem 2.4rem;
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  gap: 6.4rem;
+}
+
+.grid-two-cols {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-four-cols {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/*? Module Rules / Reusable */
+button {
+  text-transform: capitalize;
+  padding: 1rem 2.2rem;
+  font-size: 1.7rem;
+  font-weight: 500;
+  background-color: var(--btn-color);
+  border-radius: 0.8rem;
+  -webkit-border-radius: 0.8rem;
+  -moz-border-radius: 0.8rem;
+  -ms-border-radius: 0.8rem;
+  -o-border-radius: 0.8rem;
+  border: 0.1rem solid transparent;
+  cursor: pointer;
+  letter-spacing: 0.1rem;
+  transition: border-color 0.3s;
+  -webkit-transition: border-color 0.3s;
+  -moz-transition: border-color 0.3s;
+  -ms-transition: border-color 0.3s;
+  -o-transition: border-color 0.3s;
+}
+
+.secondary-btn {
+  background-color: transparent;
+  box-shadow: inset 0 0 0 0.2rem var(--btn-color);
+  margin-left: 3.2rem;
+}
+
+/***** Hero Section *****/
+
+.section-hero {
+  & .grid {
+    align-items: center;
+  }
+
+  .hero-content {
+    & p {
+      margin: 2.4rem 0 4.8rem 0;
+      &:first-child {
+        margin: 0 0 1.2rem 0;
+      }
+    }
+  }
+
+  .hero-image {
+    display: flex;
+    justify-content: center;
+    & img {
+      width: 70%;
+      height: auto;
+    }
+  }
+}
+
+/***** End Hero  *****/
+
+/***** analytics Section *****/
+
+.section-analytics {
+  margin: 9.6rem 0;
+
+  & .container {
+    background-color: var(--bg-color);
+    border-radius: 1rem;
+  }
+
+  & .grid {
+    color: var(--dark-color);
+
+    & .div1 {
+      text-align: center;
+      border-right: 0.2rem solid var(--dark-color);
+
+      &:last-child {
+        border: none;
+      }
+      & h2 {
+        font-size: 4.8rem;
+      }
+      & p {
+        text-transform: capitalize;
+      }
+    }
+  }
+}
+
+
+
+/** -----------------------
+** contact section css
+** -------------------------  */
+.section-contact {
+  & .contact-content {
+    padding: 0;
+
+    & h1 {
+      margin-bottom: 3.2rem;
+    }
+  }
+  & .container {
+    padding-top: 3.2rem;
+  }
+  & .contact-img {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    & img {
+      width: 80%;
+      height: auto;
+    }
+  }
+
+  & .section-form {
+    & form {
+      display: flex;
+      flex-direction: column;
+      gap: 3.2rem;
+    }
+    & label {
+      display: block;
+      margin-bottom: 1.2rem;
+      text-transform: capitalize;
+    }
+
+    & input,
+    textarea {
+      width: 80%;
+      padding: 0.4rem 0.6rem;
+    }
+  }
+}
+
+
+/*? state rules  */
+
+button:hover {
+  box-shadow: inset 0 0 0 0.2rem var(--bg-color);
+  /* border: 0.2rem solid #fff; */
+}
+
+a:hover,
+a.active {
+  color: #535bf2;
+}
+
+/* pseduo elements  */
+.main-heading {
+  position: relative;
+  text-transform: capitalize;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    /* width: 50%; */
+    height: 0.5rem;
+    background-color: var(--btn-color);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover,
+  a.active {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+/* error page  */
+#error-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#error-page .content {
+  max-width: 70rem;
+  text-align: center;
+}
+.content h2.header {
+  font-size: 18vw;
+  line-height: 1em;
+  animation: animate 10s ease-in-out infinite;
+  background: -webkit-repeating-linear-gradient(
+    -60deg,
+    #71b7e6,
+    var(--btn-color),
+    #b98acc,
+    #ee8176,
+    #b98acc,
+    var(--btn-color),
+    #9b59b6
+  );
+  background-size: 500%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.25);
+  position: relative;
+  -webkit-animation: animate 10s ease-in-out infinite;
+}
+
+@keyframes animate {
+  0% {
+    background-position: 0 0;
+  }
+  25% {
+    background-position: 100% 0;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  75% {
+    background-position: 0% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+.content h4 {
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  font-size: 2rem;
+}
+
+.content .btns {
+  margin: 25px 0;
+  display: inline-flex;
+  justify-content: center;
+}
+.content .btns a {
+  display: inline-block;
+  margin: 0 10px;
+  text-decoration: none;
+  border: 2px solid var(--btn-color);
+  color: var(--btn-color);
+  font-weight: 500;
+  padding: 10px 25px;
+  border-radius: 25px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+.content .btns a:hover {
+  background: var(--btn-color);
+  color: #fff;
+}
+
+/** -----------------------
+** registration section css
+** -------------------------  */
+
+.section-registration {
+  padding: 0 3.2rem;
+
+  & .container {
+    /* background-color: #fff; */
+    padding-top: 3.2rem;
+    align-items: center;
+
+    & img {
+      width: 80%;
+      height: auto;
+    }
+  }
+
+  & .registration-form {
+    & label {
+      display: block;
+      margin: 2.4rem 0 0.8rem 0;
+      text-transform: capitalize;
+    }
+    & input {
+      width: 80%;
+      padding: 0.6rem 0.6rem;
+    }
+
+    & button {
+      margin-top: 3.2rem;
+    }
+  }
+}
+
+.adminNav ul {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.adminContainer {
+  display: grid;
+  padding-top: 0;
+  grid-template-columns: 1fr 3fr;
+}
+
+.adminList {
+  flex-direction: column;
+  list-style-type: none;
+}
+
+.adminList li {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr 1fr;
+}
+
+/** -----------------------
+** services section css
+** -------------------------  */
+
+.section-services {
+  & .container:first-child {
+    padding: 0;
+  }
+  & .grid-three-cols {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3.2rem;
+  }
+
+  & .card {
+    display: flex;
+    flex-direction: column;
+    gap: 3.2rem;
+    border: 0.2rem solid var(--helper-color);
+
+    & .card-img {
+      text-align: center;
+      & img {
+        width: 70%;
+        height: auto;
+        filter: drop-shadow(0 0 2rem 2rem #fff);
+        -webkit-filter: drop-shadow(0 0 2rem 2rem #fff);
+      }
+    }
+
+    & .card-details {
+      padding: 2.4rem;
+
+      & .grid p {
+        font-size: 1.4rem;
+      }
+
+      & h2 {
+        font-size: 3.2rem;
+        margin: 1.2rem 0 2.4rem 0;
+      }
+    }
+  }
+}
+
+/** -----------------------
+** media query section css
+** -------------------------  */
+
+@media (width <= 998px) {
+  .grid-two-cols {
+    grid-template-columns: 1fr;
+  }
+
+  .section-services {
+    & .grid-three-cols {
+      grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
+    }
+  }
+
+  .section-registration {
+    & .container {
+      & .reg-img img {
+        width: 60%;
+        height: auto;
+      }
+    }
+  }
+}
+
+@media (width <= 798px) {
+  html {
+    font-size: 56.25%;
+  }
+
+  .section-registration {
+    & .container {
+      & .reg-img img {
+        width: 50%;
+        height: auto;
+      }
+    }
+
+    & .registration-form {
+      & input {
+        width: 100%;
+        padding: 0.6rem 0.6rem;
+      }
+    }
+  }
+} 
+main.jsx
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { AuthProvider } from './store/Auth.jsx';
+import App from './App.jsx'
+import "../src/index.css";
+import { ToastContainer } from 'react-toastify';
+
+
+createRoot(document.getElementById('root')).render(
+<AuthProvider>
+  <StrictMode>
+    <App />
+            <ToastContainer/>
+  </StrictMode>
+  </AuthProvider>
+) this is all client
+
+
+server-controllers-admin-controller.js 
+const User = require("../models/user-model");
+const Contact = require("../models/contact-model");
+
+// get all users 
+const getAllUsers = async (req, res) => {
+    try {
+        const users = await User.find({}, {password : 0});
+        console.log(users);
+        if(!users || users.length === 0) {
+            return res.status(404).json({message : "No Users Found"});
+        }
+        return res.status(200).json(users);
+    } catch (error) {
+        next(error);
+    }
+};
+
+//get single user logic
+const getUserById = async (req,res) => {
+    try {
+        const id = req.params.id;
+        const data = await User.findOne({_id : id}, {password : 0});
+        return res.status(200).json(data);
+    } catch (error) {
+        next(error);
+    }
+}
+
+//user delete logic 
+const deleteUserById = async (req ,res) => {
+    try {
+        const id = req.params.id;
+        await User.deleteOne({_id : id});
+        return res.status(200).json({message : "User Deleted Successfully"});
+    } catch (error) {
+        next(error);
+    }
+}
+//update user logic
+const updateUserById = async(req, res) => {
+    try {
+        const id = req.params.id;
+        const updatedUserData = req.body;
+        const updatedData = await User.updateOne(
+            {_id : id }, {$set : updatedUserData,
+
+            }
+        );
+        return res.status(200).json(updatedData);
+    } catch (error) {
+        next(error);
+    }
+}
+
+//get all contacts
+const getAllContacts = async (req, res) => {
+    try {
+        const contacts = await Contact.find();
+        if (!contacts || contacts.length === 0){
+            return res.status(404).json({message : "No Contacts Found"});
+        }
+        return res.status(200).json(contacts);
+    } catch (error) {
+        next(error);
+    }
+};
+
+//delete contact
+const deleteContactById = async (req, res) => {
+    try {
+        const id =req.params.id;
+        await Contact.deleteOne({_id :id});
+        return res.status(200).json({message : "Contact Deleted Successfully"});
+    } catch (error) {
+        next(error);
+    }
+}
+
+module.exports = {getAllContacts, getAllUsers, deleteUserById, getUserById, updateUserById, deleteContactById};
+server-controllers-auth-controller.js
+const bcrypt = require("bcryptjs");
+
+//home page 
+const User = require("../models/user-model");
+const home = async(req,res)=> {
+    try {
+        res.status(200).send("Welcome to Home Page- from controller");
+    }catch(error) {
+        console.log(error);
+    }
+};
+
+//registration 
+
+const register = async(req,res)=> {
+    try {
+        console.log(req.body);
+        const {username, email, phone, password} = req.body;
+        const userExist = await User.findOne({email});
+        if (userExist) {
+            return res.status(400).json({message : "email already exists"});
+        }
+        const userCreated = await User.create({username, email,phone, password});
+        res.status(201).json({msg : "Registration Successfull",token : await userCreated.generateToken(), userId : userCreated._id.toString()});
+    }catch(error) {
+        res.status(500).send({msg : "internal server error"});
+    }
+}
+
+
+//login 
+
+const login = async (req, res) => {
+    try {
+        const {email, password}= req.body;
+        const userExist = await User.findOne({email});
+        console.log(userExist);
+        if(!userExist) {
+            return res.status(400).json({message : "Invalid Credentials"});
+        }
+        // const user = await bcrypt.compare(password, userExist.password);
+        const user = await userExist.comparePassword(password);
+        if(user) {
+            res.status(200).json({
+                msg : "login successful",
+                token : await userExist.generateToken(),
+                userId : userExist._id.toString(),
+            });
+        }else {
+            res.status(401).json({message : "Invalid Email or password"});
+        }
+        
+    } catch (error) {
+        res.status(500).json("internal server error");
+    }
+};
+
+
+// to send user data - user logic
+const user = async (req, res) => {
+    try {
+        const userData = req.user;
+        console.log(userData);
+        return res.status(200).json({userData});
+    } catch (error) {
+        console.log(`Error from user route ${error}`);
+    }
+}
+module.exports= {home, register, login, user};
+server-controllers-contact-controller.js
+// const Contact = require("../models/contact-model");
+// const contactForm = async (req, res) => {
+//     try {
+//         const response = req.body;
+//         await Contact.create(response);
+//         return res.status(200).json({message :"Message send Successfully"});
+//     } catch (error) {
+//         return res.status(500).json({message :"Message not Delivered"});
+        
+//     }
+// };
+
+// module.exports = contactForm;
+const Contact = require("../models/contact-model");
+
+const contactForm = async (req, res) => {
+  try {
+    const { username, email, message } = req.body;
+    await Contact.create({ username, email, message });
+    return res.status(200).json({ message: "Message sent successfully" });
+  } catch (error) {
+    console.error("Error in contactForm:", error);
+    return res.status(500).json({ message: "Message not delivered" });
+  }
+};
+
+module.exports = contactForm;
+
+server-controllers-service-controller.js
+const Service = require("../models/service-model");
+const services = async (req, res) => {
+    try {
+        const response = await Service.find();
+        if(!response) {
+            res.status(404).json({msg : "No Service Found"});
+            return;
+        }
+        return res.status(200).json({msg : "service found ", data : response});
+    } catch (error) {
+        console.log(`error from the server ${error}`);
+    }
+};
+module.exports= services;
+
+server-middlewares-admin-middleware.js
+const adminMiddleware = async (req ,res, next) => {
+    try {
+        const adminRole = req.user.isAdmin;
+        if(!adminRole) {
+            return res.status(403).json({message : "Access Denied. User is not an Admin"});
+        }
+        next();
+        // res.status(200).json({msg : req.user.isAdmin});
+    } catch (error) {
+        next(error);
+    }
+};
+
+module.exports = adminMiddleware;
+server-middlewares-auth-middleware.js
+const jwt = require("jsonwebtoken");
+const user = require("../models/user-model");
+const authMiddleware = async (req , res , next) => {
+    const token = req.header("Authorization");
+    if(!token) {
+        return res.status(401).json({message : "Unauthorized HTTP. TOken not provided"});
+    }
+    const jwtToken= token.replace("Bearer","").trim();
+    console.log("token from auth-middleware", jwtToken);
+    try {
+        const isVerified = jwt.verify(jwtToken, process.env.JWT_SECRET_KEY);
+        const userData = await user.findOne({email : isVerified.email}).
+        select({
+            password: 0
+        });
+        console.log(userData);
+        req.user = userData;
+        req.token= token;
+        req.userId = userData._id;
+        next();
+    } catch (error) {
+        return res.status(401).json({message : "Unauthorized, Invalid Token"});
+    }
+}
+
+module.exports = authMiddleware;
+server-middleware-error-middleware.js
+const errorMiddleware = (err, req, res, next) => {
+  const status = err.status || 500;
+  const message = err.message || "Backend Error";
+  const extraDetails = err.extraDetails || "Error from the Backend";
+
+
+  return res.status(status).json({ message, extraDetails });
+};
+
+module.exports = errorMiddleware;
+
+
+server-middleware-validate-middleware.js
+
+
+const { ZodError } = require("zod");
+
+const validate = (schema) => async (req, res, next) => {
+  try {
+    const parsedBody = await schema.parseAsync(req.body);
+    req.body = parsedBody;
+    next();
+  } catch (err) {
+    if (err instanceof ZodError) {
+      const status = 422;
+      const message = "Validation Failed";
+      const extraDetails = err.issues?.[0]?.message || "Invalid input data";
+
+      const error = {
+        status,
+        message,
+        extraDetails,
+      };
+      console.log("Validation Error:", error);
+      next(error);
+    } else {
+      // handle unexpected error
+      next({
+        status: 500,
+        message: "Internal Server Error",
+        extraDetails: err.message || "Unexpected validation issue",
+      });
+    }
+  }
+};
+
+module.exports = validate;
+server-models-contac-model.js
+const {Schema, model} =require("mongoose");
+const contactSchema = new Schema({
+    username : {type :String, required : true},
+        email : {type :String, required : true},
+            message : {type :String, required : true},
+});
+
+const Contact = model ("Contact", contactSchema);
+module.exports = Contact;
+
+server-model-service-model.js
+const {Schema, model} = require("mongoose");
+const serviceSchema = new Schema ({
+    service : {type : String , required : true},
+    description : {type : String , required : true},
+    price : {type : String , required : true},
+    provider : {type : String , required : true},
+});
+ const Service = new model("Service", serviceSchema);
+ module.exports = Service;
+server-user-model.js
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const userSchema = new mongoose.Schema({username : {
+    type : String,
+    required : true,
+},
+email : {
+    type :String,
+    required : true,
+},
+phone : {
+    type : String ,
+     required : true,
+},
+password :  {
+    type : String,
+    require : true,
+},
+isAdmin : {
+    type :Boolean,
+    default : false,
+},
+});
+
+
+//sucuring password with bcrypt
+userSchema.pre("save", async function(next) {
+    const user = this;
+    if(!user.isModified("password")) {
+        next();
+    }try {
+        const saltRound = await bcrypt.genSalt(10);
+        const hash_password = await bcrypt.hash(user.password,saltRound);
+        user.password = hash_password;
+    
+    }catch(error) {
+        next(error);
+    }
+});
+//compare the password
+userSchema.methods.comparePassword = async function(password) {
+    return bcrypt.compare(password, this.password);
+}
+
+//jwt web token
+userSchema.methods.generateToken = async function () {
+    try {
+        return jwt.sign(
+            {
+                userId :this._id.toString(),
+                email : this.email,
+                isAdmin : this.isAdmin,
+            },
+            process.env.JWT_SECRET_KEY,
+            {
+                expiresIn: "30d",
+            },
+        );
+    }catch (error) {
+        console.log(error);
+    }
+};
+
+
+const User = new mongoose.model("User", userSchema);
+
+module.exports = User;
+server-router-admin-router.js
+const express = require("express");
+const adminController = require("../Controllers/admin-controller");
+const authMiddleware = require("../middlewares/auth-middleware");
+const adminMiddleware = require("../middlewares/admin-middleware");
+const router = express.Router();
+
+router.route("/users").get(authMiddleware, adminMiddleware, adminController.getAllUsers);
+router.route("/users/:id").get(authMiddleware, adminMiddleware, adminController.getUserById);
+router.route("/users/update/:id").patch(authMiddleware, adminMiddleware, adminController.updateUserById);
+router.route("/users/delete/:id").delete(authMiddleware, adminController.deleteUserById);
+router.route("/contacts").get(authMiddleware, adminMiddleware, adminController.getAllContacts);
+router.route("/contact/delete/:id").delete(authMiddleware, adminController.deleteContactById);
+
+module.exports = router;
+server-router-auth-router.js
+const express =require("express");
+const router = express.Router();
+const authMiddleware = require("../middlewares/auth-middleware");
+
+const authcontrollers= require("../Controllers/auth-controller");
+const {signupSchema, loginSchema} = require("../validators/auth-validators");
+const validate = require("../middlewares/validate-middleware");
+
+router.route("/").get(authcontrollers.home);
+router.route("/register").post(validate(signupSchema),authcontrollers.register);
+router.route("/login").post(validate(loginSchema),authcontrollers.login);
+router.route("/user").get(authMiddleware, authcontrollers.user);
+
+module.exports= router;
+server-router-contact-router.js
+const express = require("express");
+const router = express.Router();
+const contactForm = require("../Controllers/contact-controller");
+const contactSchema = require("../validators/contact-validator");
+const validate = require("../middlewares/validate-middleware");
+
+router.route("/contact").post(validate(contactSchema),contactForm);
+module.exports = router;
+server-router-service-router.js
+const express =  require("express");
+const router = express.Router();
+const services = require("../Controllers/service-controller");
+router.route("/service").get(services);
+
+module.exports = router;
+server-utils-const mongoose = require("mongoose");
+const URI = process.env.MONGODB_URI;
+
+const connectDb = async ()=> {
+    try {
+        await mongoose.connect(URI);
+        console.log("Connection successfull to DB");
+    }catch(error) {
+        console.log("Database Connection Failed");
+        process.exit(0);
+    }
+}
+module.exports = connectDb;
+server-validators-auth-validators.js
+const {z} = require("zod");
+
+const loginSchema = z.object({
+     email : z.
+    string({required_error : "email is requried"}).trim()
+    .email({ message: "Invalid email format" })
+    .max(255,{message : "email must not be more than 255 characters"}), 
+     password : z.
+    string({required_error : "password is requried"})
+    .min(6,{message :"password must be atleast 6 characters long"})
+    .max(1024,{message : "password must not be more than 1024 characters"}),
+})
+
+const signupSchema = loginSchema.extend({
+    username : z.
+    string({required_error : "name is requried"}).trim()
+    .min(3,{message :"name must be atleast 3 characters long"})
+    .max(255,{message : "name must not be more than 255 characters"}), 
+    phone : z.
+    string({required_error : "phone number is requried"}).trim()
+    .min(10,{message :"phone number must be atleast 10 characters long"})
+    .max(255,{message : "phone number must not be more than 255 characters"}),   
+});
+
+
+module.exports= { signupSchema, loginSchema };
+server-validators-contact-validator.js
+
+const { z } = require("zod");
+
+const contactSchema = z.object({
+  username: z
+    .string({ required_error: "Name is required" })
+    .trim()
+    .min(3, { message: "Name must be at least 3 characters long" })
+    .max(255, { message: "Name must not exceed 255 characters" }),
+
+  email: z
+    .string({ required_error: "Email is required" })
+    .trim()
+    .email({ message: "Invalid email format" })
+    .max(255, { message: "Email must not exceed 255 characters" }),
+
+  message: z
+    .string({ required_error: "Message is required" })
+    .trim()
+    .min(3, { message: "Message must be at least 3 characters long" })
+    .max(1024, { message: "Message must not exceed 1024 characters" }),
+});
+
+module.exports = contactSchema;
+
+server-.env
+MONGODB_URI=mongodb+srv://akashmeshram2486:akashiop@cluster0.s14kei5.mongodb.net/mern_admin?retryWrites=true&w=majority&appName=Cluster0
+
+
+
+JWT_SECRET_KEY=AKASHMESHRAM
+
+server-server.js
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const app = express();
+const authRoute = require("./Router/auth-router");
+const contactRoute = require("./Router/contact-router");
+const serviceRoute = require("./Router/service-router");
+const connectDb = require("./utils/db");
+const errorMiddleware = require("./middlewares/error-middleware");
+const adminRoute = require("./Router/admin-router");
+
+const corsOptions = {
+    origin : "http://localhost:5173",
+    methods :"GET,POST,PUT,DELETE,PATCH,HEAD",
+    Credentials : true,
+};
+app.use(cors(corsOptions))
+//addding express middleware
+app.use(express.json());
+
+//mounting the router to use in express app
+app.use("/api/auth", authRoute);
+app.use("/api/form", contactRoute);
+app.use("/api/data", serviceRoute);
+
+//admin route
+app.use("/api/admin" , adminRoute);
+
+
+
+app.use(errorMiddleware);
+
+const port= 5000;
+connectDb().then(()=> {
+app.listen(port,()=> {
+    console.log(`listening on port : ${port}`);
+});
+}); this is whole server code

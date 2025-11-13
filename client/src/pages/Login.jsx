@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../store/Auth";
 import { toast } from 'react-toastify';
+import { jwtDecode } from "jwt-decode";
 
 export const Login = () => {
     const[user,setUser] = useState({
@@ -9,7 +10,7 @@ export const Login = () => {
         password :"",
     });
     const navigate = useNavigate();
-        const {storeTokenInLS} = useAuth();
+        const {storeTokenInLS } = useAuth();
 
     const handleInput = (e) => {
         console.log(e);
@@ -23,32 +24,39 @@ export const Login = () => {
 
     }
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        console.log(user);
-        try {
-            const response = await fetch("http://localhost:5000/api/auth/login",{
-                method :"POST",
-                headers : {
-                    "Content-Type" : "application/json",
-                },
-                body :JSON.stringify(user),
-            });
-            if(response.ok) {
-                const res_data = await response.json();
-                console.log("After Login", res_data);
-                storeTokenInLS (res_data.token);
-                navigate("/");
-                toast.success("registration successful")
-            }else {
-                toast.error("invalid credentials");
-            }
-        } catch (error) {
-            console.log(error);
-            
-        }
+const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+        const response = await fetch("http://localhost:5000/api/auth/login",{
+            method :"POST",
+            headers : {
+                "Content-Type" : "application/json",
+            },
+            body :JSON.stringify(user),
+        });
 
-    };
+        if(response.ok) {
+            const res_data = await response.json();
+            storeTokenInLS (res_data.token);
+
+            // 🔥 decode token to check admin
+            const decoded = jwtDecode(res_data.token);
+
+            if (decoded.isAdmin) {
+                toast.success("Welcome Admin!");
+                navigate("/admin");
+            } else {
+                toast.success("Login successful");
+                navigate("/");
+            }
+
+        } else {
+            toast.error("invalid credentials");
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};
 
     return <>
     <section>

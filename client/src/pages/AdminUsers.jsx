@@ -50,7 +50,7 @@ export const AdminUsers =() => {
             <h1>Admin Users Data</h1>
         </div>
         <div className="container admin-users">
-            <table>
+            <table className="admin-table">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -68,7 +68,7 @@ export const AdminUsers =() => {
                                 <td>{curUser.email}</td>
                                 <td>{curUser.phone}</td>
                                 <td><Link to={`/admin/users/${curUser._id}/edit`}>Edit</Link></td>
-                                <td><button onClick={() => deleteUser(curUser._id)}>Delete</button></td>
+                                <td><button className="btn btn-delete" onClick={() => deleteUser(curUser._id)}>Delete</button></td>
                             </tr>
                         );
                     })}

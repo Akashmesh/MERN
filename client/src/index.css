@@ -123,6 +123,7 @@ button {
   background-color: transparent;
   box-shadow: inset 0 0 0 0.2rem var(--btn-color);
   margin-left: 3.2rem;
+  color : white;
 }
 
 /***** Hero Section *****/
@@ -495,4 +496,202 @@ a.active {
       }
     }
   }
+}
+
+
+
+
+
+/*my style*/
+/* Buttons */
+.btn-edit {
+  background-color: #2e8b57;
+  color: white;
+}
+
+.btn-edit:hover {
+  background-color: #256b46;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-delete:hover {
+  background-color: #b32a36;
+}
+
+/* Responsive admin panel */
+@media (max-width: 998px) {
+  .admin-dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-sidebar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    padding: 1rem;
+  }
+
+  .admin-menu {
+    flex-direction: row;
+    gap: 1rem;
+  }
+
+  .admin-content {
+    padding: 2rem;
+  }
+} */
+
+.footer {
+  background-color: var(--bg-color);
+  padding: 1rem 0;              /* Reduced height */
+  text-align: center;
+  border-top: 1px solid #ddd;
+  position: relative;           /* Avoids sticky behavior */
+}
+
+.footer p {
+  font-size: 1.4rem;            /* Smaller text */
+  color: var(--dark-color);
+  opacity: 0.8;
+  margin: 0;                    /* Remove extra space */
+}
+
+
+/* force implement dark mode*/
+:root {
+  background-color: #242424 !important;  
+  color: white !important;
+}
+body {
+  background-color: #242424 !important;
+  color: white !important;
+}
+
+/***************************
+** ADMIN DASHBOARD UI
+****************************/
+.admin-dashboard {
+  display: grid;
+  grid-template-columns: 22rem 1fr;
+  min-height: 100vh;
+  background: #1e1e1e;
+  color: #fff;
+}
+
+.admin-sidebar {
+  background: #0f0f0f;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.admin-title {
+  font-size: 2.4rem;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+}
+
+.admin-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+.admin-menu a {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  font-size: 1.8rem;
+  border-radius: 0.8rem;
+  color: #e0e0e0;
+  transition: 0.3s;
+}
+
+.admin-menu a:hover,
+.admin-menu a.active {
+  background: #323232;
+  color: #fff;
+}
+
+.admin-content {
+  padding: 3rem;
+  background: #121212;
+}
+
+.admin-content h1 {
+  margin-bottom: 2rem;
+  font-size: 3rem;
+  color: #fff;
+  border-left: 4px solid #646cff;
+  padding-left: 1rem;
+}
+
+/******** DASHBOARD CARDS **********/
+.admin-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.admin-card {
+  background: #1f1f1f;
+  padding: 2rem;
+  border-radius: 1rem;
+  text-align: center;
+  box-shadow: 0 0 10px rgb(0 0 0 / 20%);
+  transition: 0.3s;
+}
+
+.admin-card:hover {
+  transform: translateY(-5px);
+  background: #272727;
+}
+
+.admin-card h2 {
+  font-size: 4rem;
+  color: #646cff;
+}
+
+.admin-card p {
+  font-size: 1.6rem;
+  opacity: 0.8;
+}
+
+/******** TABLE DARK MODE **********/
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+  background: #1c1c1c;
+  color: #fff;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 1.2rem 1.6rem;
+  border-bottom: 1px solid #333;
+}
+
+.admin-table th {
+  background: #282828;
+  text-transform: uppercase;
+}
+
+.admin-table tr:hover {
+  background: #2b2b2b;
+}
+
+.btn-edit {
+  background: #2e8b57;
+}
+
+.btn-delete {
+  background: #d9534f;
 }
