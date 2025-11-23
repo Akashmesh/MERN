@@ -169,7 +169,7 @@ React Context Global Auth	Manages token, user, services
 Dark Theme UI	Modern styled interface
 Admin Sidebar	Responsive dashboard layout
 CRUD Operations	Users + Contacts
-🧪 9. Execution Flow (Interview-Style Explanation)
+9. Execution Flow 
 User Registration
 
 Form → Zod Validation → Save → Hash → JWT → Login
