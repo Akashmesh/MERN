@@ -3,55 +3,66 @@ import { Analytics } from "../components/Analytics";
 import { useAuth } from "../store/Auth";
 
 export const About = () => {
-  const {user} = useAuth();
+  const { user } = useAuth();
+
   return (
     <>
       <main>
         <section className="section-hero">
           <div className="container grid grid-two-cols">
-            <div className="hero-content">
-              {/* <p>We care to cure your Health</p> */}
-              <p>Welcome, {user ? `${user.username} to our website` : `to our websiste`}</p>
 
-              <h1>Why Choose Us? </h1>
+            <div className="hero-content">
               <p>
-                Expertise: Our team consists of experienced IT professionals who
-                are passionate about staying up-to-date with the latest industry
-                trends.
+                Welcome {user ? `${user.username}` : ""} to my portfolio!
               </p>
+
+              <h1>Who Am I?</h1>
+
               <p>
-                Customization: We understand that every business is unique.
-                Thats why we create solutions that are tailored to your specific
-                needs and goals.
+                I’m <strong>Akash Meshram</strong>, a MERN Stack Developer and
+                Technical Support Engineer currently working at 
+                <strong> Sant Gadge Baba Amravati University (SGBAU)</strong>.
+                I build practical, scalable, real-world applications that improve 
+                internal workflows for students and administrative teams.
               </p>
+
+              <h1>What I Do</h1>
+
               <p>
-                Customer-Centric Approach: We prioritize your satisfaction and
-                provide top-notch support to address your IT concerns.
+                <strong>Full-Stack Development:</strong> I design and develop
+                modern web applications using React, Node.js, Express, and MongoDB.
+                My projects include a Youth Festival Chat Assistant, an automated 
+                Certificate Management System, and a secure Role-Based Admin Dashboard.
               </p>
+
               <p>
-                Affordability: We offer competitive pricing without compromising
-                on the quality of our services.
+                <strong>Technical Support & Software Maintenance:</strong>  
+                I ensure SGBAU’s software systems run smoothly by resolving issues, 
+                maintaining applications, and improving system reliability.
               </p>
-              <p>
-                Reliability: Count on us to be there when you need us. We're
-                committed to ensuring your IT environment is reliable and
-                available 24/7.
-              </p>
+
+
               <div className="btn btn-group">
                 <NavLink to="/contact">
-                  <button className="btn"> Connect Now</button>
+                  <button className="btn">Contact Me</button>
                 </NavLink>
-                <button className="btn secondary-btn">learn more</button>
+
+                <NavLink to="/service">
+                  <button className="btn secondary-btn">View My Work</button>
+                </NavLink>
               </div>
             </div>
+
+            {/* Image remains the same */}
             <div className="hero-image">
               <img
                 src="/images/about.png"
-                alt="coding buddies "
+                alt="coding buddies"
                 width="400"
                 height="500"
               />
             </div>
+
           </div>
         </section>
       </main>

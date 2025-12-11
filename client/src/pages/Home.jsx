@@ -7,70 +7,101 @@ export const Home = () => {
         <section className="section-hero">
           <div className="container grid grid-two-cols">
             <div className="hero-content">
-              <p>We are here for you...</p>
-              <h1>Welcome to ..... Tech Solutions</h1>
+              <p>Hi — I'm Akash Meshram</p>
+              <h1>MERN Developer & Technical Support at SGBAU</h1>
+
               <p>
-                Are you ready to take your business to the next level with
-                cutting-edge IT solutions? Look no further! At Thapa Technical,
-                we specialize in providing innovative IT services and solutions
-                tailored to meet your unique needs.
+                I build practical web apps and internal tools that solve real
+                problems for Sant Gadge Baba Amravati University and beyond.
+                Recent work includes a festival chatbot, a role-based admin
+                dashboard, and an automated certificate management system —
+                all built with React, Node.js and MongoDB.
               </p>
+
+              <div className="skills-row" aria-hidden>
+                <span className="skill">React</span>
+                <span className="skill">Node.js</span>
+                <span className="skill">Express</span>
+                <span className="skill">MongoDB</span>
+              </div>
+
               <div className="btn btn-group">
-                <a href="/contact">
-                  <button className="btn">connect now</button>
+                <a href="https://github.com/Akashmesh">
+                  <button className="btn">View Projects</button>
                 </a>
-                <a href="/services">
-                  <button className="btn secondary-btn">learn more</button>
+                <a href="/contact">
+                  <button className="btn secondary-btn">Contact Me</button>
                 </a>
               </div>
             </div>
 
-            {/* hero images  */}
+            {/* hero image */}
             <div className="hero-image">
               <img
                 src="/images/home.png"
-                alt="coding together"
-                width="400"
-                height="500"
+                alt="Akash Meshram working on code"
+                width="420"
+                height="420"
               />
             </div>
           </div>
         </section>
       </main>
 
-      {/* 2nd section  */}
+      {/* Analytics / Metrics */}
       <Analytics />
 
-      {/* 3rd section  */}
+      {/* Projects / Call to action */}
       <section className="section-hero">
         <div className="container grid grid-two-cols">
-          {/* hero images  */}
+          {/* image / screenshot */}
           <div className="hero-image">
             <img
               src="/images/design.png"
-              alt="coding together"
-              width="400"
-              height="500"
+              alt="Screenshots of projects"
+              width="420"
+              height="420"
             />
           </div>
 
           <div className="hero-content">
-            <p>We are here to help you</p>
-            <h1>Get Started Today</h1>
+            <p>Selected Projects & Impact</p>
+            <h1>Tools I Built for SGBAU & Campus Teams</h1>
+
             <p>
-              Ready to take the first step towards a more efficient and secure
-              IT infrastructure? Contact us today for a free consultation and
-              let's discuss how Thapa Technical can help your business thrive in
-              the digital age.
+              <strong>SGBAU Youth Festival Chat Assistant:</strong> a mobile-first,
+              JSON-driven chatbot that gives students instant access to event
+              schedules, venue maps and registration links — built with React,
+              Framer Motion and Vite.
             </p>
+
+            <p>
+              <strong>MERN Role-Based Admin Dashboard:</strong> secure admin
+              panel with JWT authentication, modular Express APIs and full CRUD
+              for users, services and messages — designed for maintainability
+              and real-world use.
+            </p>
+
+            <p>
+              <strong>Certificate Management System:</strong> end-to-end MERN
+              solution for batch certificate generation, admin verification and
+              public certificate lookup (PDF export + Excel import).
+            </p>
+
             <div className="btn btn-group">
-              <a href="/contact">
-                <button className="btn">connect now</button>
+              <a href="https://youthfestival.netlify.app/">
+                <button className="btn">Open Chat Assistant</button>
               </a>
-              <a href="/services">
-                <button className="btn secondary-btn">learn more</button>
+              <a href="/projects#cert-system">
+                <button className="btn secondary-btn">See Certificate System</button>
               </a>
             </div>
+
+            <p style={{ marginTop: "8px", fontSize: "1.3rem" }}>
+              I also handle technical support & software maintenance for SGBAU,
+              ensuring systems run reliably while building tools that improve
+              workflows.
+            </p>
           </div>
         </div>
       </section>

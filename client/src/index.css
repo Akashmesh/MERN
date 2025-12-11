@@ -695,3 +695,30 @@ body {
 .btn-delete {
   background: #d9534f;
 }
+
+
+.skills-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 1rem 0 1.5rem 0;
+}
+
+.skill {
+  padding: 6px 12px;
+  background: #f3f4f6; /* light gray */
+  color: #333;
+  border-radius: 20px;
+  font-size: 1rem;
+  font-weight: 500;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease-in-out;
+  cursor: default;
+}
+
+.skill:hover {
+  background: #2563eb; /* blue shade */
+  color: white;
+  border-color: #2563eb;
+  transform: translateY(-2px);
+}

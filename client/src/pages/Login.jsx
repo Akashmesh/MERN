@@ -44,7 +44,7 @@ const handleSubmit = async (e) => {
 
             if (decoded.isAdmin) {
                 toast.success("Welcome Admin!");
-                navigate("/admin");
+                navigate("/admin/users");
             } else {
                 toast.success("Login successful");
                 navigate("/");
