@@ -1,224 +1,182 @@
-MERN Admin Panel Project – Full Documentation
+# MERN Portfolio and Admin Dashboard
+
+This repository contains a full-stack MERN application that combines a personal portfolio website with a protected admin panel. Visitors can browse the site, learn about the developer, view services, register or log in, and submit contact messages. Admin users can access a secured dashboard to review platform stats, manage users, and delete contact submissions.
+
+The project is built with React on the frontend and Node.js, Express, and MongoDB on the backend. It demonstrates authentication, role-based authorization, protected routes, REST APIs, and admin-side CRUD operations in one codebase.
+
+## What the Project Includes
 
-A complete MERN Stack application featuring:
+- Public pages for Home, About, Services, Contact, Register, and Login
+- JWT-based authentication for user registration and login
+- Role-based admin access using `isAdmin`
+- Protected admin dashboard with summary cards
+- Admin user management: list, edit, and delete users
+- Admin contact management: list and delete contact messages
+- Services fetched dynamically from MongoDB
+- Backend request validation with Zod
+- Password hashing with `bcryptjs`
+- Global auth state in React Context
+- Toast notifications for key actions
 
-User Registration & Login (JWT Auth)
+## Tech Stack
 
-Contact Form Module
+### Frontend
 
-Services Listing
+- React
+- Vite
+- React Router DOM
+- React Toastify
+- React Icons
+- `jwt-decode`
 
-Admin Dashboard (Protected)
+### Backend
 
-Admin Users Management (CRUD)
+- Node.js
+- Express
+- MongoDB
+- Mongoose
+- JSON Web Tokens
+- `bcryptjs`
+- Zod
 
-Admin Contacts Management
+## How the App Works
 
-Role-based Routing with React Router
+### Public Site
 
-Global Authentication using Context API
+The public side works like a portfolio website. Visitors can read about the developer, browse services, and send a message through the contact form. Service records are loaded from MongoDB and displayed on the frontend.
 
-1. Tech Stack
-Frontend
+### Authentication
 
-React (Vite)
+Users can register and log in from the frontend. On registration, the backend validates the request with Zod, hashes the password, stores the user in MongoDB, and returns a JWT token. On login, the backend verifies the credentials and returns a new token.
 
-React Router DOM
+The frontend stores the token in `localStorage`, uses it to fetch the logged-in user, and redirects admin users into the admin area after login.
 
-Context API
+### Admin Area
 
-JWT Decode
+The admin section is protected on both the frontend and backend:
 
-Toastify (Notifications)
+- React route protection prevents non-admin users from accessing `/admin`
+- Express auth middleware validates the JWT token
+- Admin middleware checks `req.user.isAdmin`
 
-Backend
+Once authenticated as an admin, the user can:
 
-Node.js + Express
+- View dashboard counts for users, contacts, and services
+- View all registered users
+- Update user details
+- Delete users
+- View all contact form submissions
+- Delete contact messages
 
-MongoDB + Mongoose
+## Project Structure
 
-JWT Authentication
+```text
+MERN/
+|-- client/
+|   |-- public/
+|   |-- src/
+|   |   |-- components/
+|   |   |-- layouts/
+|   |   |-- pages/
+|   |   `-- store/
+|   |-- package.json
+|   `-- vite.config.js
+|-- server/
+|   |-- Controllers/
+|   |-- middlewares/
+|   |-- models/
+|   |-- Router/
+|   |-- utils/
+|   |-- validators/
+|   |-- package.json
+|   `-- server.js
+`-- README.md
+```
 
-Bcrypt Password Hashing
+## Main API Routes
 
-Zod Request Validation
+### Auth
 
-Express Middleware Architecture
+- `GET /api/auth/` - basic test route
+- `POST /api/auth/register` - create a new user
+- `POST /api/auth/login` - log in and receive a JWT
+- `GET /api/auth/user` - get current user data from token
 
-2. Project Architecture
-/client
-   /components
-   /pages
-   /layouts
-   /store
-   App.jsx
-   main.jsx
+### Contact
 
-/server
-   /controllers
-   /middlewares
-   /models
-   /routes
-   /validators
-   server.js
+- `POST /api/form/contact` - submit a contact message
 
- 3. Authentication Flow
-Registration
+### Services
 
-User submits form
+- `GET /api/data/service` - fetch all services
 
-Backend validates with Zod
+### Admin
 
-Hash password using bcrypt
+- `GET /api/admin/users` - list all users
+- `GET /api/admin/users/:id` - get one user
+- `PATCH /api/admin/users/update/:id` - update a user
+- `DELETE /api/admin/users/delete/:id` - delete a user
+- `GET /api/admin/contacts` - list all contact messages
+- `DELETE /api/admin/contact/delete/:id` - delete a contact message
 
-Save to MongoDB
+## Environment Variables
 
-Return JWT token
+Create a `server/.env` file with the following keys:
 
-Frontend saves token in localStorage
+```env
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET_KEY=your_secret_key
+```
 
-Login
+## Local Setup
 
-User enters email + password
+### 1. Install dependencies
 
-Server verifies user and password
-
-Returns JWT token
-
-Token is decoded using jwtDecode
-
-If isAdmin = true → redirect /admin
-
-Else → redirect /
-
-4. Authorization & Security
-Middleware:
-Middleware	Purpose
-authMiddleware	Validates JWT, attaches user object
-adminMiddleware	Ensures only admin can access certain routes
-validateMiddleware	Uses Zod to validate body input
-errorMiddleware	Global error handler
- 5. Admin Dashboard Features
-🔹 /admin
-
-Admin Home Dashboard
-Shows:
-
-Total Users
-
-Total Contacts
-
-Total Services
-
-🔹 /admin/users
-
-Admin can:
-
-View all users
-
-Update user
-
-Delete user
-
-🔹 /admin/contacts
-
-Admin can:
-
-View all messages
-
-Delete messages
-
-💬 6. Contact Form Flow
-User:
-
-Submits name, email, message
-
-Passes Zod validation
-
-Stored in MongoDB
-
-Success message displayed
-
-Admin:
-
-Views all messages
-
-Deletes unwanted messages
-
-🛠 7. Service Module
-
-Services fetched from /api/data/service
-
-Displayed dynamically in frontend
-
-Each service shows:
-
-Title
-
-Description
-
-Price
-
-Provider
-
-8. Key Features
-Feature	Description
-Role-based Routing	Admin vs User redirection
-Fully Protected Admin Routes	Cannot access without isAdmin
-React Context Global Auth	Manages token, user, services
-Dark Theme UI	Modern styled interface
-Admin Sidebar	Responsive dashboard layout
-CRUD Operations	Users + Contacts
-9. Execution Flow 
-User Registration
-
-Form → Zod Validation → Save → Hash → JWT → Login
-
-Login
-
-Validate credentials
-
-Decode JWT
-
-If admin → /admin
-
-Else → /
-
-AuthContext Initialization
-
-Fetch /api/auth/user
-
-Load user role, email, name
-
-Fetch all services
-
-App UI adjusts automatically based on role
-
-Admin Navigates to Dashboard
-
-Sidebar loads
-
-Dashboard cards show stats
-
-User table loads from /api/admin/users
-
-Contacts table loads from /api/admin/contacts
-
-User Access
-
-Browse services
-
-Submit contact form
-
-Manage own interactions
-
-▶️ 10. How to Run the Project
-Backend
+```bash
 cd server
 npm install
-npm run dev
 
-Frontend
-cd client
+cd ../client
 npm install
+```
+
+### 2. Start the backend
+
+The backend currently does not define a `dev` script in `server/package.json`, so start it with one of these commands:
+
+```bash
+cd server
+node server.js
+```
+
+or
+
+```bash
+cd server
+npx nodemon server.js
+```
+
+The Express server runs on `http://localhost:5000`.
+
+### 3. Start the frontend
+
+```bash
+cd client
 npm run dev
+```
+
+The Vite frontend runs on `http://localhost:5173`.
+
+## Admin Access Note
+
+New users are created with `isAdmin: false` by default. To use the admin dashboard, promote a user in MongoDB by setting that user's `isAdmin` field to `true`, then log in again.
+
+## Important Notes
+
+- The frontend currently calls the backend using hardcoded URLs such as `http://localhost:5000`
+- CORS in the backend is configured for `http://localhost:5173`
+- There is no automated test suite configured yet
+
+## Why This Project Matters
+
+This project shows how to build a practical MERN application with both public and protected experiences in one codebase. It works well as a portfolio project, a learning reference for JWT auth and admin routing, and a starting point for service-based business or internal dashboard applications.

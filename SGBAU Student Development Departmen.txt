@@ -1,0 +1,257 @@
+SGBAU Student Development Department Certificate System (MERN Project)
+
+You are an expert senior MERN Stack architect.
+Develop a complete, production-ready MERN web application for the Student Development Department, Sant Gadge Baba Amravati University (SGBAU).
+
+This system will be used to generate Soft Skill Workshop Certificates conducted by affiliated colleges.
+
+Build the project with clean folder structure, reusable components, API security, validations, and scalable schema design.
+
+🎯 Project Requirements
+1. Users
+
+There are two types of users:
+
+Admin
+
+College
+
+🎨 2. Public Website Pages
+Landing Page
+
+Hero section about Soft Skills
+
+Navigation menu: About Us | Contact Us | Login
+
+Tailwind CSS modern UI
+
+About Us Page
+
+Information about the Student Development Department.
+
+Contact Us Page
+
+Fields:
+
+Name
+
+Mobile
+
+Message
+Submit → store in MongoDB + Send email (optional)
+
+🔐 3. Login Page
+
+Fields:
+
+User ID
+
+Password
+
+After login, redirect based on role:
+
+Admin → Admin Dashboard
+
+College → College Dashboard
+
+Use:
+
+JWT authentication
+
+bcrypt password hashing
+
+Protected routes
+
+🏫 4. College Dashboard
+
+After college login, show:
+
+College Code + College Name automatically fetched from DB.
+
+Form to fill workshop details:
+
+Principal Name
+
+Principal Mobile
+
+Principal Email
+
+Soft Skill Coordinator Name
+
+Coordinator Mobile
+
+Coordinator Email
+
+Program Date From
+
+Program Date To
+
+Save Button
+
+After Save → Show “Add Student Details” button.
+
+Add Student Details Form
+
+Fields:
+
+Student Name
+
+Class
+
+Auto-generate:
+
+Certificate Number (serially increasing)
+
+Format dates like “10th February 2025 to 13th February 2025”
+
+After entry → Add to student list displayed below:
+
+Student Name
+
+Class
+
+Certificate No
+
+Edit option
+
+Delete option
+
+🛠 5. Admin Dashboard
+
+Admin functionalities:
+
+A. Create College Users
+
+Fields:
+
+College Name
+
+College Code
+
+Username
+
+Password
+
+Admin creates the login credentials.
+
+B. Verify Certificates
+
+Admin can:
+
+View certificate requests submitted by colleges
+
+Approve
+
+Reject
+
+Generate Certificates in bulk (PDF)
+
+C. Admin Certificate Generation via Excel Upload
+
+Admin can upload Excel file with columns:
+
+Name
+
+College Name
+
+Certificate Number
+
+Class
+
+From Date
+
+To Date
+
+System should generate certificates automatically.
+
+🧾 6. Certificate Requirements
+
+Each certificate contains:
+
+Certificate Number
+
+Student Name
+
+Class
+
+College Name
+
+Program Dates (formatted beautifully)
+
+PDF Generation Options:
+
+Use html-to-pdf or puppeteer
+
+Clean SGBAU branding
+
+Auto numbering
+
+Store generated certificates in /uploads/certificates/<college>/<year>/
+
+📁 7. Tech Stack Rules
+Frontend
+
+React + Vite
+
+Tailwind CSS
+
+React Router
+
+Context API or Redux for auth
+
+Toast notifications
+
+Beautiful Admin UI
+
+Backend
+
+Node.js + Express
+
+MongoDB + Mongoose
+
+JWT Authentication
+
+bcrypt for hashing
+
+Multer for file uploads (Excel)
+
+xlsx or exceljs for Excel parsing
+
+Important Backend Requirements
+
+Fully RESTful API
+
+Role-based middleware
+
+Input validation using Joi or Validator
+
+Clean controller-service-model architecture
+
+📚 8. What You Should Generate
+
+Whenever I ask, generate:
+
+Full folder structure
+
+API routes + controllers
+
+MongoDB schemas
+
+React components
+
+Dashboard UI
+
+Protected routes
+
+Certificate generation logic
+
+Excel import logic
+
+PDF design
+
+Complete working code blocks
+
+Step-by-step setup instructions
+
+Write all code in clean, scalable, production quality. 
+Generate full project code” and “Give me folder structure”.

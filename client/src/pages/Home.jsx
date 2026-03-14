@@ -26,7 +26,7 @@ export const Home = () => {
               </div>
 
               <div className="btn btn-group">
-                <a href="https://github.com/Akashmesh">
+                <a href="#project-section">
                   <button className="btn">View Projects</button>
                 </a>
                 <a href="/contact">
@@ -52,7 +52,7 @@ export const Home = () => {
       <Analytics />
 
       {/* Projects / Call to action */}
-      <section className="section-hero">
+      <section className="section-hero" id="project-section">
         <div className="container grid grid-two-cols">
           {/* image / screenshot */}
           <div className="hero-image">
@@ -92,8 +92,11 @@ export const Home = () => {
               <a href="https://youthfestival.netlify.app/">
                 <button className="btn">Open Chat Assistant</button>
               </a>
-              <a href="/projects#cert-system">
+              <a href="https://soft-skills-cert-generator-dsd-sgbau.netlify.app/">
                 <button className="btn secondary-btn">See Certificate System</button>
+              </a>
+              <a href="https://github.com/Akashmesh/cosmetic-store">
+                <button className="btn secondary-btn mybtn">E-Commerce(Skincare)</button>
               </a>
             </div>
 
