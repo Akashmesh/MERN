@@ -1,4 +1,16 @@
 # MERN Portfolio and Admin Dashboard
+## landing page
+![Landing page](./client/public/readme/mernlanding.jpeg)
+
+## contact page
+![Contact Page](./client/public/readme/contactus.jpeg)
+
+## Admin Dashboard
+![Admin Dashboard](./client/public/readme/dashboard.png)
+
+## Admin - Users
+![Admin - Users](./client/public/readme/adminusers.png)
+
 
 This repository contains a full-stack MERN application that combines a personal portfolio website with a protected admin panel. Visitors can browse the site, learn about the developer, view services, register or log in, and submit contact messages. Admin users can access a secured dashboard to review platform stats, manage users, and delete contact submissions.
 
